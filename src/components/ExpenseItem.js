@@ -1,10 +1,10 @@
-
 import React, { useContext } from 'react';
-import { TiDelete } from 'react-icons/ti';
 import { AppContext } from '../context/AppContext';
+import { FaPlus, FaMinus } from 'react-icons/fa'; // Import icons from react-icons library
+import Button from 'react-bootstrap/Button'; // Import Bootstrap button component
 
 const ExpenseItem = (props) => {
-    const { dispatch } = useContext(AppContext);
+    const { dispatch, currency } = useContext(AppContext);
 
     const handleDeleteExpense = () => {
         dispatch({
@@ -21,17 +21,41 @@ const ExpenseItem = (props) => {
 
         dispatch({
             type: 'ADD_EXPENSE',
-            payload: expense
+            payload: expense,
         });
+    };
 
-    }
+    const decreaseAllocation = (name) => {
+        const expense = {
+            name: name,
+            cost: 10,
+        };
+
+        dispatch({
+            type: 'RED_EXPENSE',
+            payload: expense,
+        });
+    };
 
     return (
         <tr>
-        <td>{props.name}</td>
-        <td>£{props.cost}</td>
-        <td><button onClick={event=> increaseAllocation(props.name)}>+</button></td>
-        <td><TiDelete size='1.5em' onClick={handleDeleteExpense}></TiDelete></td>
+            <td>{props.name}</td>
+            <td>{currency}{props.cost}</td>
+            <td>
+                <Button variant="success" onClick={() => increaseAllocation(props.name)}>
+                    <FaPlus /> {/* Plus symbol */}
+                </Button>
+            </td>
+            <td>
+                <Button variant="danger" onClick={() => decreaseAllocation(props.name)}>
+                    <FaMinus /> {/* Minus symbol */}
+                </Button>
+            </td>
+            <td>
+                <Button variant="danger" onClick={handleDeleteExpense}>
+                    Delete
+                </Button>
+            </td>
         </tr>
     );
 };
